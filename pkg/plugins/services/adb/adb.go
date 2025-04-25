@@ -42,15 +42,6 @@ func init() {
 // match adb m|^AUTH\x01\0\0\0\0\0\0\0........\xbc\xb1\xa7\xb1|s p/Android Debug Bridge/ i/token auth required/ o/Android/ cpe:/o:google:android/a cpe:/o:linux:linux_kernel/a
 // softmatch adb m|^AUTH(.)\0\0\0\0\0\0\0........\xbc\xb1\xa7\xb1|s p/Android Debug Bridge/ i/auth required: $I(1,"<")/ o/Android/ cpe:/o:google:android/a cpe:/o:linux:linux_kernel/a
 
-//	if requestName == "TCP_adbConnect" && finger.Service == "" {
-//		if (strings.HasPrefix(responseRaw, "CNXN\x01\x00\x00\x01\x00\x10\x00") || strings.HasPrefix(responseRaw, "AUTH\x01\x00\x00\x01\x00\x10\x00")) &&
-//			strings.Contains(responseRaw, "\xbc\xb1\xa7\xb1") {
-//			return &FingerPrint{
-//				ProbeName: requestName,
-//				Service:   "adb",
-//			}
-//		}
-//	}
 func (p *ADBPlugin) Run(conn net.Conn, timeout time.Duration, target plugins.Target) (*plugins.Service, error) {
 	requestBytes := []byte{
 		// adb connect
@@ -67,18 +58,16 @@ func (p *ADBPlugin) Run(conn net.Conn, timeout time.Duration, target plugins.Tar
 	}
 	if len(response) == 0 {
 		log.Printf("[-] adb response null")
-
 		return nil, nil
 	}
 
-	// response 转字符串
 	responseRaw := string(response)
 	// log.Println("response:", responseRaw)
 	// log.Println("target:", target)
 	if (strings.HasPrefix(responseRaw, "CNXN\x01\x00\x00\x01\x00\x10\x00") || strings.HasPrefix(responseRaw, "AUTH\x01\x00\x00\x01\x00\x10\x00")) && strings.Contains(responseRaw, "\xbc\xb1\xa7\xb1") {
 		return plugins.CreateServiceFrom(target, plugins.ServiceADB{}, false, "", plugins.TCP), nil
 	} else {
-		log.Println("match null ")
+		log.Printf("[-] adb response not match")
 		return nil, nil
 	}
 
