@@ -36,6 +36,7 @@ const (
 const TypeService string = "service"
 
 const (
+	ProtoADB        = "adb"
 	ProtoDNS        = "dns"
 	ProtoDHCP       = "dhcp"
 	ProtoEcho       = "echo"
@@ -406,7 +407,7 @@ type ServiceRedis struct {
 func (e ServiceRedis) Type() string { return ProtoRedis }
 
 type ServiceFTP struct {
-	Banner         string `json:"banner"`
+	Banner string `json:"banner"`
 }
 
 func (e ServiceFTP) Type() string { return ProtoFTP }
@@ -509,3 +510,7 @@ type ServiceJDWP struct {
 }
 
 func (e ServiceJDWP) Type() string { return ProtoJDWP }
+
+type ServiceADB struct{}
+
+func (e ServiceADB) Type() string { return ProtoADB }

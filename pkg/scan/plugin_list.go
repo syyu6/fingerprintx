@@ -18,6 +18,7 @@ package scan
 // When a new plugin is added, this list should be updated.
 
 import (
+	_ "github.com/praetorian-inc/fingerprintx/pkg/plugins/services/adb"
 	_ "github.com/praetorian-inc/fingerprintx/pkg/plugins/services/dhcp"
 	_ "github.com/praetorian-inc/fingerprintx/pkg/plugins/services/dns"
 	_ "github.com/praetorian-inc/fingerprintx/pkg/plugins/services/echo"
